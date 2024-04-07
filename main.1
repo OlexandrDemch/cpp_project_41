@@ -1,0 +1,68 @@
+#include <iostream>
+#include <cstring>
+#include <locale.h>
+
+class String {
+private:
+    static int count;
+    char *str;
+    int size;
+public:
+    String(int len = 80) : size(len) {
+        str = new char[size + 1];
+        count++;
+    }
+
+    String(const char *s) {
+        size = strlen(s);
+        str = new char[size + 1];
+        strcpy(str, s);
+        count++;
+    }
+
+    String(std::istream& is) {
+        char buffer[256];
+        is.getline(buffer, 256);
+        size = strlen(buffer);
+        str = new char[size + 1];
+        strcpy(str, buffer);
+        count++;
+    }
+
+    ~String() {
+        delete [] str;
+        count--;
+    }
+
+    void input() {
+        std::cout << "Введіть рядок: ";
+        std::cin.getline(str, size);
+    }
+
+    void display() {
+        std::cout << "Рядок: " << str << std::endl;
+    }
+
+    static int getCount() {
+        return count;
+    }
+};
+
+int String::count = 0;
+
+int main() {
+    setlocale(LC_CTYPE, "ru_RU.cp1251"); 
+
+    String str1;
+    str1.display();
+
+    String str2("Hello, world!");
+    str2.display();
+
+    String str3(std::cin);
+    str3.display();
+
+    std::cout << "Кількість створених об'єктів рядків: " << String::getCount() << std::endl;
+
+    return 0;
+}
